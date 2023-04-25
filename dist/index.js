@@ -12740,24 +12740,6 @@ const { getOctokit } = __nccwpck_require__(7592);
         core.setFailed(`Exception parsing github context ${e}`);
     }
 
-    const endpoint = `${instanceUrl}/api/sn_devops/devops/artifact/registration?orchestrationToolId=${toolId}`;
-   
-    let payload;
-    
-    try {
-        payload = {
-            'artifacts': artifacts,
-            'pipelineName': `${githubContext.repository}/${githubContext.workflow}`,
-            'stageName': jobName,
-            'taskExecutionNumber': `${githubContext.run_id}` + '/attempts/' + `${githubContext.run_attempt}`, 
-            'branchName': `${githubContext.ref_name}`
-        };
-        console.log("paylaod to register artifact: " + JSON.stringify(payload));
-    } catch (e) {
-        core.setFailed(`Exception setting the payload to register artifact ${e}`);
-        return;
-    }
-
     try {
         const token = core.getInput('devops-token', { required: true });
         console.log("input token : " + token);
@@ -12778,6 +12760,25 @@ const { getOctokit } = __nccwpck_require__(7592);
         }
     } catch (e) {
         core.setFailed(`Failed getting repository hooks data ${e}`);
+        return;
+    }
+
+    const endpoint = `${instanceUrl}/api/sn_devops/devops/artifact/registration?orchestrationToolId=${toolId}`;
+   
+    let payload;
+    
+    try {
+        payload = {
+            'artifacts': artifacts,
+            'pipelineName': `${githubContext.repository}/${githubContext.workflow}`,
+            'stageName': jobName,
+            'taskExecutionNumber': `${githubContext.run_id}` + '/attempts/' + `${githubContext.run_attempt}`, 
+            'branchName': `${githubContext.ref_name}`,
+            'sessionToken': token
+        };
+        console.log("paylaod to register artifact: " + JSON.stringify(payload));
+    } catch (e) {
+        core.setFailed(`Exception setting the payload to register artifact ${e}`);
         return;
     }
 
