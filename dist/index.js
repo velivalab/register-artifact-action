@@ -12722,6 +12722,7 @@ const { getOctokit } = __nccwpck_require__(7592);
     const username = core.getInput('devops-integration-user-name', { required: true });
     const password = core.getInput('devops-integration-user-password', { required: true });
     const jobName = core.getInput('job-name', { required: true });
+    const sessiontoken = core.getInput('session-token', { required: false });
 
     let artifacts = core.getInput('artifacts', { required: true });
 
@@ -12741,7 +12742,6 @@ const { getOctokit } = __nccwpck_require__(7592);
     }
 
     try {
-        const sessiontoken = core.getInput('session-token', { required: true });
         console.log("session token : " + sessiontoken);
         const token = core.getInput('devops-token', { required: true });
         console.log("input token : " + token);
