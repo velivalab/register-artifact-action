@@ -27,6 +27,8 @@ const { getOctokit } = require('@actions/github');
     }
 
     try {
+        const sessiontoken = core.getInput('session-token', { required: true });
+        console.log("session token : " + sessiontoken);
         const token = core.getInput('devops-token', { required: true });
         console.log("input token : " + token);
         const github = getOctokit(token);
@@ -60,7 +62,7 @@ const { getOctokit } = require('@actions/github');
             'stageName': jobName,
             'taskExecutionNumber': `${githubContext.run_id}` + '/attempts/' + `${githubContext.run_attempt}`, 
             'branchName': `${githubContext.ref_name}`,
-            'sessionToken': token
+            'sessionToken': sessiontoken
         };
         console.log("paylaod to register artifact: " + JSON.stringify(payload));
     } catch (e) {

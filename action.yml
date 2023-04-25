@@ -25,6 +25,9 @@ inputs:
   devops-token:
     description: 'Token to authorize REST API'
     required: false
+  session-token:
+    description: 'Token to authorize REST API'
+    required: false
 branding:
   icon: 'refresh-ccw'
   color: 'green'
