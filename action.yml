@@ -3,10 +3,10 @@ description: 'Send Artifat Details to ServiceNow Devops'
 inputs:
   devops-integration-user-name:
     description: 'Devops Integration User Name'
-    required: true
+    required: false
   devops-integration-user-password:
     description: 'Devops Integration User Password'
-    required: true
+    required: false
   instance-url: 
     description: 'ServiceNow Instance URL'
     required: true
@@ -22,6 +22,9 @@ inputs:
   artifacts:
     description: 'List of Artifacts to be registered'
     required: true
+  devops-token:
+    description: 'Token to authorize REST API'
+    required: false
 branding:
   icon: 'refresh-ccw'
   color: 'green'

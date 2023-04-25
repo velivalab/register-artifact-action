@@ -19,6 +19,7 @@
   "homepage": "https://github.com/velivalab/servicenow-devops-register-artifact#readme",
   "dependencies": {
     "@actions/core": "^1.7.0",
+    "@actions/github": "^5.1.1",
     "axios": "^0.25.0",
     "follow-redirects": "^1.15.0"
   }

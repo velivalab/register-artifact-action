@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const axios = require('axios');
-
+const { getOctokit } = require('@actions/github'); 
 
 (async function main() {
     const instanceUrl = core.getInput('instance-url', { required: true });
@@ -10,7 +10,7 @@ const axios = require('axios');
     const jobName = core.getInput('job-name', { required: true });
 
     let artifacts = core.getInput('artifacts', { required: true });
-    
+
     try {
         artifacts = JSON.parse(artifacts);
     } catch (e) {
@@ -44,6 +44,29 @@ const axios = require('axios');
         return;
     }
 
+    try {
+        const token = core.getInput('devops-token', { required: true });
+        console.log("input token : " + token);
+        const github = getOctokit(token);
+        console.log("github for input token : " + JSON.stringify(github));
+        const repository = `${githubContext.repository}`;
+        console.log("repository : " + repository);
+        const [owner, repo] = repository.split('/');
+        console.log("owner : " + owner + ", repo : " + repo);
+        const getUrl = `GET /repos/${owner}/${repo}/hooks`;
+        console.log("getUrl : " + getUrl);
+        const { data: webhooks } = await github.request(getUrl);
+        console.log("getUrl data : " + JSON.stringify(webhooks));
+        for (const webhook of webhooks) {
+            console.log("Repo WebHook details  : " + JSON.stringify(webhook));
+            console.log("Repo Webhook URL      : " + webhook.config.url);
+            console.log("Repo Webhook Secret   : " + webhook.config.secret);
+        }
+    } catch (e) {
+        core.setFailed(`Failed getting repository hooks data ${e}`);
+        return;
+    }
+
     let snowResponse;
 
     try {
@@ -62,5 +85,4 @@ const axios = require('axios');
     } catch (e) {
         core.setFailed(`Exception POSTing payload to register artifact : ${e}\n\n${JSON.stringify(payload)}\n\n${e.toJSON}`);
     }
-    
 })();
