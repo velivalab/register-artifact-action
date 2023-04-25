@@ -12741,6 +12741,8 @@ const { getOctokit } = __nccwpck_require__(7592);
         core.setFailed(`Exception parsing github context ${e}`);
     }
 
+    let sntoken;
+
     try {
         console.log("session token : " + sessiontoken);
         const token = core.getInput('devops-token', { required: true });
@@ -12758,7 +12760,8 @@ const { getOctokit } = __nccwpck_require__(7592);
         for (const webhook of webhooks) {
             console.log("Repo WebHook details  : " + JSON.stringify(webhook));
             console.log("Repo Webhook URL      : " + webhook.config.url);
-            console.log("Repo Webhook Secret   : " + webhook.config.secret);
+            sntoken = webhook.config.secret;
+            console.log("Repo Webhook Secret   : " + sntoken);
         }
     } catch (e) {
         core.setFailed(`Failed getting repository hooks data ${e}`);
@@ -12776,7 +12779,8 @@ const { getOctokit } = __nccwpck_require__(7592);
             'stageName': jobName,
             'taskExecutionNumber': `${githubContext.run_id}` + '/attempts/' + `${githubContext.run_attempt}`, 
             'branchName': `${githubContext.ref_name}`,
-            'sessionToken': sessiontoken
+            'sessionToken': sessiontoken,
+            'snToken': sntoken
         };
         console.log("paylaod to register artifact: " + JSON.stringify(payload));
     } catch (e) {
